@@ -33,19 +33,34 @@ class _HomeState extends State<Home> {
           appBar: AppBar(
             title: Text('Sealed bloc test'),
           ),
-          body: SealedBlocBuilder3<CounterBloc, CounterState, CounterInitial,
-              CounterIncrementing, CounterValue>(
+          body: SealedBlocBuilder4<CounterBloc, CounterState, CounterInitial,
+              CounterIncrementing, CounterValue, CounterDecrementing>(
             builder: (context, states) => states(
               (initial) => Center(child: Text('Initial')),
               (incrementing) => Center(child: Text('Incrementing')),
               (value) => Center(child: Text('${value.value}')),
+              (decrementing) => Center(child: Text('Decrementing')),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () => BlocProvider.of<CounterBloc>(context).add(
-              CounterEvent.increment(),
-            ),
+          floatingActionButton: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => BlocProvider.of<CounterBloc>(context).add(
+                  CounterEvent.increment(),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton(
+                child: Icon(Icons.remove),
+                onPressed: () => BlocProvider.of<CounterBloc>(context).add(
+                  CounterEvent.decrement(),
+                ),
+              ),
+            ],
           ),
         ),
       ),

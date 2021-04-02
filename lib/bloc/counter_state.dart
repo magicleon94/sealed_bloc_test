@@ -1,11 +1,13 @@
 part of 'counter_bloc.dart';
 
-class CounterState
-    extends Union3Impl<CounterInitial, CounterIncrementing, CounterValue> {
-  static const unions =
-      Triplet<CounterInitial, CounterIncrementing, CounterValue>();
+class CounterState extends Union4Impl<CounterInitial, CounterIncrementing,
+    CounterValue, CounterDecrementing> {
+  static const unions = Quartet<CounterInitial, CounterIncrementing,
+      CounterValue, CounterDecrementing>();
   CounterState._(
-      Union3<CounterInitial, CounterIncrementing, CounterValue> union)
+      Union4<CounterInitial, CounterIncrementing, CounterValue,
+              CounterDecrementing>
+          union)
       : super(union);
 
   factory CounterState.initial() =>
@@ -16,6 +18,9 @@ class CounterState
 
   factory CounterState.value(int value) =>
       CounterState._(unions.third(CounterValue(value)));
+
+  factory CounterState.decrementing() =>
+      CounterState._(unions.fourth(CounterDecrementing()));
 }
 
 class CounterInitial {}
@@ -27,3 +32,5 @@ class CounterValue {
 
   CounterValue(this.value);
 }
+
+class CounterDecrementing {}

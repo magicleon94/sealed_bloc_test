@@ -16,9 +16,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   ) async* {
     yield* event.join(
       _increment,
-      () async* {
-        yield CounterState.initial();
-      },
+      _decrement,
     );
   }
 
@@ -26,6 +24,13 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     yield CounterState.incrementing();
     await Future.delayed(Duration(seconds: 1));
     counter++;
+    yield CounterState.value(counter);
+  }
+
+  Stream<CounterState> _decrement(DecrementCounter event) async* {
+    yield CounterState.decrementing();
+    await Future.delayed(Duration(milliseconds: 500));
+    counter--;
     yield CounterState.value(counter);
   }
 }

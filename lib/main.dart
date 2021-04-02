@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sealed_bloc_test/bloc/counter_bloc.dart';
-import 'package:sealed_flutter_bloc/sealed_flutter_bloc.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,13 +32,19 @@ class _HomeState extends State<Home> {
           appBar: AppBar(
             title: Text('Sealed bloc test'),
           ),
-          body: SealedBlocBuilder4<CounterBloc, CounterState, CounterInitial,
-              CounterIncrementing, CounterValue, CounterDecrementing>(
-            builder: (context, states) => states(
+          body: BlocBuilder<CounterBloc, CounterState>(
+            //just to show how
+            buildWhen: (previous, current) => current.join(
+              (_) => true,
+              (_) => true,
+              (_) => true,
+              (_) => true,
+            ),
+            builder: (context, state) => state.join(
               (initial) => Center(child: Text('Initial')),
               (incrementing) => Center(child: Text('Incrementing')),
-              (value) => Center(child: Text('${value.value}')),
               (decrementing) => Center(child: Text('Decrementing')),
+              (value) => Center(child: Text('${value.value}')),
             ),
           ),
           floatingActionButton: Column(
@@ -47,18 +52,16 @@ class _HomeState extends State<Home> {
             children: [
               FloatingActionButton(
                 child: Icon(Icons.add),
-                onPressed: () => BlocProvider.of<CounterBloc>(context).add(
-                  CounterEvent.increment(),
-                ),
+                onPressed: () => BlocProvider.of<CounterBloc>(context)
+                    .add(IncrementCounter()),
               ),
               SizedBox(
                 height: 10,
               ),
               FloatingActionButton(
                 child: Icon(Icons.remove),
-                onPressed: () => BlocProvider.of<CounterBloc>(context).add(
-                  CounterEvent.decrement(),
-                ),
+                onPressed: () => BlocProvider.of<CounterBloc>(context)
+                    .add(DecrementCounter()),
               ),
             ],
           ),

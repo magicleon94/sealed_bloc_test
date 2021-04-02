@@ -1,17 +1,12 @@
 part of 'counter_bloc.dart';
 
-class CounterEvent extends Union2Impl<IncrementCounter, DecrementCounter> {
-  static const unions = Doublet<IncrementCounter, DecrementCounter>();
+abstract class CounterEvent extends Equatable {
+  const CounterEvent();
 
-  CounterEvent._(Union2<IncrementCounter, DecrementCounter> union)
-      : super(union);
-
-  factory CounterEvent.increment() =>
-      CounterEvent._(unions.first(IncrementCounter()));
-  factory CounterEvent.decrement() =>
-      CounterEvent._(unions.second(DecrementCounter()));
+  @override
+  List<Object> get props => [];
 }
 
-class IncrementCounter {}
+class IncrementCounter extends CounterEvent {}
 
-class DecrementCounter {}
+class DecrementCounter extends CounterEvent {}

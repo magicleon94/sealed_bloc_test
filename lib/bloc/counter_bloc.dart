@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:sealed_flutter_bloc/sealed_flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:sealed_unions/sealed_unions.dart';
+import 'package:sealed_unions/union_4.dart';
 
 part 'counter_event.dart';
 part 'counter_state.dart';
@@ -9,15 +11,15 @@ part 'counter_state.dart';
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
   CounterBloc() : super(CounterState.initial());
   var counter = 0;
-
   @override
   Stream<CounterState> mapEventToState(
     CounterEvent event,
   ) async* {
-    yield* event.join(
-      _increment,
-      _decrement,
-    );
+    if (event is IncrementCounter) {
+      yield* _increment(event);
+    } else if (event is DecrementCounter) {
+      yield* _decrement(event);
+    }
   }
 
   Stream<CounterState> _increment(IncrementCounter event) async* {
